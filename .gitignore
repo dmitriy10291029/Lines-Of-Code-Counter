@@ -3,6 +3,9 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
+master-ssh
+master-ssh.pub
+
 ### IntelliJ IDEA ###
 .idea/
 *.iws
