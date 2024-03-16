@@ -3,23 +3,28 @@ package org.example.linecounter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.InvalidPathException;
-import java.nio.file.Paths;
 import java.nio.file.Path;
-import java.util.ArrayList;
+import java.nio.file.Paths;
+import java.util.HashSet;
 
 
 public class LineCounter {
+    static public String USAGE = "loc-util \"<path>\" [ext. 1] [ext. 2]...\nIf extensions are not specified all extensions considered.";
+
     final private Path directory;
-    final private ArrayList<String> extensions;
+    final private HashSet<String> extensions;
+    final private Printer printer;
     private boolean isCounted = false;
 
-    public LineCounter(String path) throws InvalidPathException {
-        directory = Paths.get(path);
-        extensions = null;
+    public LineCounter(String path, Printer printer) throws InvalidPathException {
+        this(path, printer, null);
     }
 
-    public LineCounter(String path, final ArrayList<String> extensions) throws InvalidPathException {
-        directory = Paths.get(path);
+    public LineCounter(String path, Printer printer, final HashSet<String> extensions)
+        throws InvalidPathException
+    {
+        this.printer = printer;
+        directory = Path.of(path);
         this.extensions = extensions;
     }
 
@@ -31,11 +36,13 @@ public class LineCounter {
         if (isCounted) return;
 
         try (var stream = Files.list(directory)) {
-            TableGenerator tableGenerator = new TableGenerator(new ConsolePrinter());
+            TableGenerator tableGenerator = new TableGenerator(printer);
+
             tableGenerator.printHeader();
-            stream.forEach(fileName -> {
-                tableGenerator.printRow(fileName.toString(), "", "");
-            });
+
+            var lineCounterVisitor = new LineCounterFileVisitor(directory, tableGenerator, extensions);
+            Files.walkFileTree(directory, lineCounterVisitor);
+
             tableGenerator.printSummary(100, 20);
             isCounted = true;
         }

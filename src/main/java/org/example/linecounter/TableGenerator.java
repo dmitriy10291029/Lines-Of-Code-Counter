@@ -1,12 +1,33 @@
 package org.example.linecounter;
 
 public class TableGenerator {
-    private static final int FILENAME_COL_SIZE = 40;
+    private static final int FILENAME_COL_SIZE = 70;
     private static final int COL_SIZE = 12;
-    private final IPrinter printer;
+    private final Printer printer;
 
-    public TableGenerator(IPrinter printer) {
+    public TableGenerator(Printer printer) {
         this.printer = printer;
+    }
+
+    private void printDivider() {
+        for (int i = 0; i < FILENAME_COL_SIZE; i++) {
+            printer.print("-");
+        }
+        for (int i = 0; i < 2; ++i) {
+            printer.print("|");
+            for (int j = 0; j < COL_SIZE; j++) {
+                printer.print("-");
+            }
+        }
+        printer.println("");
+    }
+
+    private void printCell(String str) {
+        printer.print("|");
+        for (int i = 0; i < COL_SIZE - str.length(); i++) {
+            printer.print(" ");
+        }
+        printer.print(str);
     }
 
     public void printRow(String filename, int i1, int i2) {
@@ -44,26 +65,5 @@ public class TableGenerator {
     public void printSummary(int code, int all) {
         printDivider();
         printRow("SUMMARY", code, all);
-    }
-
-    private void printDivider() {
-        for (int i = 0; i < FILENAME_COL_SIZE; i++) {
-            printer.print("-");
-        }
-        for (int i = 0; i < 2; ++i) {
-            printer.print("|");
-            for (int j = 0; j < COL_SIZE; j++) {
-                printer.print("-");
-            }
-        }
-        printer.println("");
-    }
-
-    private void printCell(String str) {
-        printer.print("|");
-        for (int i = 0; i < COL_SIZE - str.length(); i++) {
-            printer.print(" ");
-        }
-        printer.print(str);
     }
 }

@@ -1,6 +1,6 @@
 package org.example.linecounter;
 
-public class ConsolePrinter implements IPrinter {
+public class ConsolePrinter implements Printer {
     public void print(Object o) {
         System.out.print(o);
     }

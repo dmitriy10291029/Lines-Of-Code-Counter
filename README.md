@@ -6,7 +6,7 @@ This util prints an info about number of lines of every language and/or file.
 ```
 loc-util "<path>" [ext. 1] [ext. 2]...
 
-If extensions are not cpecified all extensions considered. 
+If extensions are not specified all extensions considered. 
 ```
 
 **Example 2**:
