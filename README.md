@@ -1,6 +1,7 @@
 # Lines of code counter
 
-This util prints an info about number of lines of every language and/or file.
+This utility prints the total number of lines and the number of lines of code of all files 
+with the **specified extensions** in the **specified directory.**
 
 **Usage**:
 ```
@@ -10,7 +11,7 @@ If extensions are not specified all extensions considered.
 
 **Example**:
 ```
-ARGUMENTS: \"/home/user/Documents/coding/java/LinesOfCodeCounter\" .java .md
+ARGUMENTS: "/home/user/Documents/coding/java/LinesOfCodeCounter" .java .md
 ```
 ```
 OUTPUT:
