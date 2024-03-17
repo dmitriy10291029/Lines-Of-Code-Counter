@@ -1,6 +1,10 @@
 package org.example.linecounter;
 
+import java.io.BufferedReader;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.FileVisitResult;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.Path;
@@ -21,18 +25,47 @@ public class LineCounterFileVisitor extends SimpleFileVisitor<Path> {
     }
 
     @Override
-    public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+    public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) {
         if (extensions == null || isSupportedExt(file)) {
-            int codeLines = 0;
-            int allLines = 0;
-            try {
-                throw new IOException();
-                //tableGenerator.printRow(startDirectory.relativize(file).toString(), codeLines, allLines);
+            try (BufferedReader reader = new BufferedReader(new InputStreamReader(
+                    new FileInputStream(file.toString()), StandardCharsets.UTF_8))) {
+                int codeLines = 0;
+                int allLines = 0;
+                int read = 0;
+                boolean isEmptyLine = true;
+
+                while ((read = reader.read()) >= 0) {
+                    char ch = (char) read;
+                    if (ch == '\n') {
+                        if (!isEmptyLine) {
+                            codeLines++;
+                            isEmptyLine = true;
+                        }
+                        allLines++;
+                    } else if (!Character.isWhitespace(ch)) {
+                        isEmptyLine = false;
+                    }
+                }
+                if (!isEmptyLine) {
+                    codeLines++;
+                }
+                allLines++;
+                tableGenerator.printRow(startDirectory.relativize(file).toString(), codeLines, allLines);
+                sumCodeLines += codeLines;
+                sumAllLines += allLines;
             } catch (IOException e) {
                 tableGenerator.printRow(startDirectory.relativize(file).toString(), "error", "error");
             }
         }
         return FileVisitResult.CONTINUE;
+    }
+
+    public int getSumCodeLines() {
+        return sumCodeLines;
+    }
+
+    public int getSumAllLines() {
+        return sumAllLines;
     }
 
     private boolean isSupportedExt(Path file) {

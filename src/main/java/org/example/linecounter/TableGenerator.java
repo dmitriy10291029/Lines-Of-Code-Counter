@@ -1,15 +1,15 @@
 package org.example.linecounter;
 
 public class TableGenerator {
-    private static final int FILENAME_COL_SIZE = 70;
-    private static final int COL_SIZE = 12;
+    private static final int FILENAME_COL_SIZE = 60;
+    private static final int COL_SIZE = 10;
     private final Printer printer;
 
     public TableGenerator(Printer printer) {
         this.printer = printer;
     }
 
-    private void printDivider() {
+    public void printDivider() {
         for (int i = 0; i < FILENAME_COL_SIZE; i++) {
             printer.print("-");
         }
@@ -59,11 +59,9 @@ public class TableGenerator {
 
     public void printHeader() {
         printRow("", "Code", "All");
-        printDivider();
     }
 
     public void printSummary(int code, int all) {
-        printDivider();
         printRow("SUMMARY", code, all);
     }
 }
