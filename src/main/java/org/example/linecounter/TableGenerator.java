@@ -1,7 +1,7 @@
 package org.example.linecounter;
 
 public class TableGenerator {
-    private static final int FILENAME_COL_SIZE = 60;
+    private static final int FILENAME_COL_SIZE = 90;
     private static final int COL_SIZE = 10;
     private final Printer printer;
 
@@ -14,7 +14,7 @@ public class TableGenerator {
             printer.print("-");
         }
         for (int i = 0; i < 2; ++i) {
-            printer.print("|");
+            printer.print("+");
             for (int j = 0; j < COL_SIZE; j++) {
                 printer.print("-");
             }

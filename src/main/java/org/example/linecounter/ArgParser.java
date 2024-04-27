@@ -1,7 +1,6 @@
 package org.example.linecounter;
 
 import java.nio.file.InvalidPathException;
-import java.util.HashSet;
 import java.util.Arrays;
 import java.util.HashSet;
 
@@ -16,7 +15,37 @@ public class ArgParser {
             throw new InvalidPathException("", "Invalid Path");
         }
 
+        extensions = getExtensionsSet(Arrays.copyOfRange(args, 1, args.length));
+    }
+
+    public ArgParser(String line) throws InvalidPathException {
+        int startOfDir = -1;
+        int endOfDir = -1;
+        char[] charArray = line.toCharArray();
+        for (int i = 0; i < line.length(); i++) {
+            if (charArray[i] == '\"') {
+                if (startOfDir == -1) {
+                    startOfDir = i + 1;
+                } else {
+                    endOfDir = i;
+                    break;
+                }
+            }
+        }
+
+        if (endOfDir == -1) {
+        throw new InvalidPathException(line, "Invalid Path");
+        }
+
+        directory = line.substring(startOfDir, endOfDir);
+        String[] lostArgs = line.substring(endOfDir + 1).split("\\s+");
+
+        extensions = getExtensionsSet(lostArgs);
+    }
+
+    private static HashSet<String> getExtensionsSet(String[] args) {
         if (args.length > 1) {
+            HashSet<String> extensions = new HashSet<>();
             extensions = new HashSet<>();
 
             for (int i = 1; i < args.length; ++i){
@@ -26,8 +55,9 @@ public class ArgParser {
                     extensions.add(args[i]);
                 }
             }
+            return extensions;
         } else {
-            extensions = null;
+            return null;
         }
     }
 
